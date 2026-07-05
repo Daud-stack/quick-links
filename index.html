@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quick Links Hub — Your Personal Launchpad</title>
+  <meta name="description" content="A sleek, dark-mode quick links dashboard for organizing and accessing your most-visited bookmarks and resources." />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>" />
+</head>
+<body>
+  <div class="page-wrapper">
+
+    <!-- ─── Navbar ─── -->
+    <nav class="navbar" id="navbar">
+      <div class="container">
+        <a href="#" class="navbar-brand" id="navbar-brand">
+          <div class="navbar-logo">⚡</div>
+          <div class="navbar-title">Quick<span>Links</span></div>
+        </a>
+
+        <div class="search-wrapper">
+          <span class="search-icon">🔍</span>
+          <input
+            type="text"
+            class="search-input"
+            id="searchInput"
+            placeholder="Search links by name, URL, or category…"
+            autocomplete="off"
+            aria-label="Search links"
+          />
+          <kbd class="search-kbd" aria-hidden="true">Ctrl K</kbd>
+        </div>
+
+        <div class="navbar-actions">
+          <!-- Admin Lock Toggle -->
+          <button class="btn btn-ghost btn-icon admin-lock-btn" id="btnAdminToggle" aria-label="Toggle admin mode" title="Admin login">
+            🔒
+          </button>
+
+          <!-- Admin-only: Add Link -->
+          <button class="btn btn-primary btn-add-desktop admin-only" id="btnAddDesktop" title="Add a new link">
+            <span>＋</span> Add Link
+          </button>
+
+          <!-- Admin-only: Settings Dropdown -->
+          <div class="dropdown admin-only" id="settingsDropdown">
+            <button class="btn btn-ghost btn-icon" id="btnSettings" aria-label="Settings" aria-haspopup="true" aria-expanded="false">
+              ⚙️
+            </button>
+            <div class="dropdown-menu" id="settingsMenu" role="menu">
+              <button class="dropdown-item" id="btnExport" role="menuitem">📤 Export Links (JSON)</button>
+              <button class="dropdown-item" id="btnImport" role="menuitem">📥 Import Links (JSON)</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Hidden file input for import -->
+    <input type="file" id="fileImport" accept=".json" style="display: none;" />
+
+    <!-- ─── Hero Section ─── -->
+    <header class="hero">
+      <div class="container">
+        <h1>Your <span class="gradient-text">Quick Links</span></h1>
+        <p class="subtitle">
+          Your personal launchpad — all your most-used bookmarks organized in one beautiful, searchable dashboard.
+        </p>
+      </div>
+    </header>
+
+    <!-- ─── Main Content ─── -->
+    <main>
+      <div class="container">
+
+        <!-- Stats -->
+        <div class="stats-bar" id="statsBar">
+          <div class="stat-item">
+            <span class="stat-value" id="statTotal">0</span>
+            <span class="stat-label" id="statTotalLabel">links</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-value" id="statCategories">0</span>
+            <span class="stat-label">categories</span>
+          </div>
+        </div>
+
+        <!-- Category Filters -->
+        <div class="filter-bar" id="filterBar" role="tablist" aria-label="Category filters">
+          <!-- Chips are injected by JS -->
+        </div>
+
+        <!-- Links Grid -->
+        <div class="links-grid" id="linksGrid">
+          <!-- Cards are injected by JS -->
+        </div>
+
+        <!-- Empty State -->
+        <div class="empty-state" id="emptyState" style="display: none;">
+          <div class="empty-icon">🔗</div>
+          <p id="emptyMessage">No links match your search. Try a different keyword or add a new link.</p>
+        </div>
+      </div>
+    </main>
+
+    <!-- ─── FAB (Mobile) — Admin only ─── -->
+    <button class="fab admin-only" id="fabAdd" aria-label="Add a new link">＋</button>
+
+    <!-- ─── Add / Edit Link Modal ─── -->
+    <div class="modal-overlay" id="modalOverlay">
+      <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+        <div class="modal-header">
+          <h2 id="modalTitle">Add New Link</h2>
+          <button class="modal-close" id="modalClose" aria-label="Close modal">✕</button>
+        </div>
+
+        <form id="addLinkForm" autocomplete="off">
+          <div class="form-group">
+            <label class="form-label" for="inputUrl">URL</label>
+            <input class="form-input" type="url" id="inputUrl" placeholder="https://example.com" required />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="inputTitle">Title</label>
+            <input class="form-input" type="text" id="inputTitle" placeholder="My Awesome Link" required />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="inputDesc">Description <span style="color: var(--outline);">(optional)</span></label>
+            <input class="form-input" type="text" id="inputDesc" placeholder="A short description of this link" />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Category</label>
+            <div class="category-selector" id="categorySelector">
+              <button type="button" class="category-option selected" data-category="work">💼 Work</button>
+              <button type="button" class="category-option" data-category="social">💬 Social</button>
+              <button type="button" class="category-option" data-category="dev">🛠️ Dev Tools</button>
+              <button type="button" class="category-option" data-category="media">🎬 Media</button>
+              <button type="button" class="category-option" data-category="learn">📚 Learning</button>
+            </div>
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn btn-ghost" id="btnCancel">Cancel</button>
+            <button type="submit" class="btn btn-primary" id="btnSubmit">Add Link</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- ─── Delete Confirmation Modal ─── -->
+    <div class="modal-overlay" id="deleteOverlay">
+      <div class="modal modal-sm" role="alertdialog" aria-modal="true" aria-labelledby="deleteTitle" aria-describedby="deleteDesc">
+        <div class="modal-header">
+          <h2 id="deleteTitle">Delete Link</h2>
+          <button class="modal-close" id="deleteClose" aria-label="Close">✕</button>
+        </div>
+        <p class="delete-message" id="deleteDesc">Are you sure you want to delete "<strong id="deleteName"></strong>"? This cannot be undone.</p>
+        <div class="modal-footer">
+          <button class="btn btn-ghost" id="deleteCancelBtn">Cancel</button>
+          <button class="btn btn-danger" id="deleteConfirmBtn">Delete</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── Admin PIN Modal ─── -->
+    <div class="modal-overlay" id="adminOverlay">
+      <div class="modal modal-sm" role="dialog" aria-modal="true" aria-labelledby="adminTitle">
+        <div class="modal-header">
+          <h2 id="adminTitle">🔐 Admin Login</h2>
+          <button class="modal-close" id="adminClose" aria-label="Close">✕</button>
+        </div>
+        <p class="admin-desc">Enter the admin password to unlock editing features.</p>
+        <form id="adminForm" autocomplete="off">
+          <div class="form-group">
+            <label class="form-label" for="adminPin">Password</label>
+            <input class="form-input" type="password" id="adminPin" placeholder="Enter password" required />
+          </div>
+          <p class="admin-error" id="adminError" style="display: none;">Incorrect password. Try again.</p>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-ghost" id="adminCancelBtn">Cancel</button>
+            <button type="submit" class="btn btn-primary">Unlock</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- ─── Toast ─── -->
+    <div class="toast" id="toast" role="status" aria-live="polite">
+      <span class="toast-icon">✓</span>
+      <span class="toast-message" id="toastMessage">Link added!</span>
+    </div>
+
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
