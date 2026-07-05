@@ -1,0 +1,16 @@
+# Quick Links Hub — Caddy Configuration
+# To run the server, simply type `caddy run` in your terminal.
+
+:8080 {
+    # Set the root to the current directory
+    root * .
+
+    # Enable the static file server
+    file_server
+
+    # Enable gzip/zstd compression for faster loading
+    encode zstd gzip
+
+    # Handle 404 errors by redirecting to index.html (useful if we ever add routing)
+    try_files {path} /index.html
+}
