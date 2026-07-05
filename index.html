@@ -58,7 +58,7 @@
     </nav>
 
     <!-- Hidden file input for import -->
-    <input type="file" id="fileImport" accept=".json" style="display: none;" />
+    <input type="file" id="fileImport" accept=".json" aria-label="Import JSON" title="Import JSON" />
 
     <!-- ─── Hero Section ─── -->
     <header class="hero">
@@ -97,7 +97,7 @@
         </div>
 
         <!-- Empty State -->
-        <div class="empty-state" id="emptyState" style="display: none;">
+        <div class="empty-state" id="emptyState">
           <div class="empty-icon">🔗</div>
           <p id="emptyMessage">No links match your search. Try a different keyword or add a new link.</p>
         </div>
@@ -127,7 +127,7 @@
           </div>
 
           <div class="form-group">
-            <label class="form-label" for="inputDesc">Description <span style="color: var(--outline);">(optional)</span></label>
+            <label class="form-label" for="inputDesc">Description <span class="optional-text">(optional)</span></label>
             <input class="form-input" type="text" id="inputDesc" placeholder="A short description of this link" />
           </div>
 
@@ -178,7 +178,7 @@
             <label class="form-label" for="adminPin">Password</label>
             <input class="form-input" type="password" id="adminPin" placeholder="Enter password" required />
           </div>
-          <p class="admin-error" id="adminError" style="display: none;">Incorrect password. Try again.</p>
+          <p class="admin-error" id="adminError">Incorrect password. Try again.</p>
           <div class="modal-footer">
             <button type="button" class="btn btn-ghost" id="adminCancelBtn">Cancel</button>
             <button type="submit" class="btn btn-primary">Unlock</button>
